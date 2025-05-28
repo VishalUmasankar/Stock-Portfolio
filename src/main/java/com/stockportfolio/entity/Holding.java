@@ -12,9 +12,9 @@ public class Holding {
 	
 	@ManyToOne
 	@JoinColumn(name="user_id")
-	private User user;
+	private User userDetails;
 	
-	private String StockSymbol;
+	private String stockSymbol;
 	
 	private int quantity;
 	
@@ -25,54 +25,29 @@ public class Holding {
 	private Double Above;
 	
 	private Double Below;
-
-	public String getAlert() {
-		return Alert;
+	
+	public long getId() {
+		return id;
 	}
 
-	public void setAlert(String alert) {
-		Alert = alert;
+	public void setId(long id) {
+		this.id = id;
 	}
 
-	public double getAbove() {
-		return Above;
+	public User getUserDetails() {
+		return userDetails;
 	}
 
-	public void setAbove(double above) {
-		Above = above;
-	}
-
-	public double getBelow() {
-		return Below;
-	}
-
-	public void setBelow(double below) {
-		Below = below;
-	}
-
-	public double getCurrent_price() {
-		return current_price;
-	}
-
-	public void setCurrent_price(double current_price) {
-		this.current_price = current_price;
-	}
-
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserDetails(User userDetails) {
+		this.userDetails = userDetails;
 	}
 
 	public String getStockSymbol() {
-		return StockSymbol;
+		return stockSymbol;
 	}
 
 	public void setStockSymbol(String stockSymbol) {
-		StockSymbol = stockSymbol;
+		this.stockSymbol = stockSymbol;
 	}
 
 	public int getQuantity() {
@@ -82,4 +57,37 @@ public class Holding {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
+
+	public Double getCurrent_price() {
+		return current_price;
+	}
+
+	public void setCurrent_price(Double current_price) {
+		this.current_price = current_price;
+	}
+
+	public String getAlert() {
+		return Alert;
+	}
+
+	public void setAlert(String alert) {
+		Alert = alert;
+	}
+
+	public Double getAbove() {
+		return Above;
+	}
+
+	public void setAbove(Double above) {
+		Above = above;
+	}
+
+	public Double getBelow() {
+		return Below;
+	}
+
+	public void setBelow(Double below) {
+		Below = below;
+	}
+
 }
