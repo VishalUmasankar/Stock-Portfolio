@@ -45,7 +45,7 @@ public class User {
         this.password = password;
     }
     
-    public String getemail() {
+    public String getemail(){
     	return email;
     }
     
@@ -53,3 +53,10 @@ public class User {
     	this.email = email;
     }
 }
+
+	    
+	    
+	    
+
+
+    
