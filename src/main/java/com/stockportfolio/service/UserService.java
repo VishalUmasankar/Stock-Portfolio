@@ -3,6 +3,7 @@ import com.stockportfolio.entity.User;
 import com.stockportfolio.dto.LoginRequest;
 import com.stockportfolio.dto.LoginResponse;
 import com.stockportfolio.entity.User;
+import com.stockportfolio.exception.UserAlreadyExistsException;
 import com.stockportfolio.exception.UserNotFoundException;
 import com.stockportfolio.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,13 @@ public class UserService {
     private UserRepository userRepository;
 
     public User saveUser(User user) {
+    	if (userRepository.findByEmail(user.getemail()) != null) {
+            throw new UserAlreadyExistsException("Email already registered");
+        }
+        
+        if (userRepository.findByUsername(user.getUsername()) != null) {
+            throw new UserAlreadyExistsException("Username already taken");
+        }
         return userRepository.save(user);
     }
 
@@ -26,7 +34,8 @@ public class UserService {
             throw new UserNotFoundException("Invalid email or password");
         }
 
-        return new LoginResponse(user.getUsername(),user.getemail());
-    }	
+        return new LoginResponse(user.getId(),user.getUsername(),user.getemail());
+    }
+  
 }
 

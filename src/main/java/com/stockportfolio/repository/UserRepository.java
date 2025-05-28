@@ -8,9 +8,12 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Long> {
 	
 	User findByEmail(String email);
+
 	static User findById(long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	User findByUsername(String username);
 }
 
