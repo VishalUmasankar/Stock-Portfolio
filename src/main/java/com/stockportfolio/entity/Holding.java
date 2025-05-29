@@ -1,3 +1,4 @@
+
 	package com.stockportfolio.entity;
 	
 	import jakarta.persistence.*;
