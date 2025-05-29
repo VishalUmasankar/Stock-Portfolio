@@ -1,16 +1,14 @@
 package com.stockportfolio.controller;
 
 import com.stockportfolio.dto.LoginRequest;
-import com.stockportfolio.entity.Activity;
-import com.stockportfolio.repository.ActivityRepository;
-
 import com.stockportfolio.dto.LoginResponse;
+import com.stockportfolio.dto.RegistrationRequest;
+import com.stockportfolio.entity.Activity;
 import com.stockportfolio.entity.Holding;
 import com.stockportfolio.entity.User;
-import com.stockportfolio.repository.UserRepository;
-import com.stockportfolio.service.HoldingService;
-import com.stockportfolio.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.stockportfolio.exception.InvalidEmailFormatException;
+import com.stockportfolio.service.HoldingServiceInterface;
+import com.stockportfolio.service.UserServiceInterface;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,19 +18,22 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserServiceInterface userService;
+    private final HoldingServiceInterface holdingService;
 
-    @Autowired
-    private HoldingService holdingService;
-    
-    @Autowired
-    private ActivityRepository activityRepository;
-
+    public UserController(UserServiceInterface userService, HoldingServiceInterface holdingService) {
+        this.userService = userService;
+        this.holdingService = holdingService;
+    }
 
     @PostMapping("/register")
-    public User createUser(@RequestBody User user) {
-        return userService.saveUser(user);
+    public ResponseEntity<?> createUser(@RequestBody RegistrationRequest request) {
+        try {
+            User user = userService.saveUser(request);
+            return ResponseEntity.ok(user);
+        } catch (InvalidEmailFormatException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("/login")
@@ -66,15 +67,13 @@ public class UserController {
             return ResponseEntity.internalServerError().body(null);
         }
     }
-    
+
     @GetMapping("/activity/user/{userId}")
     public ResponseEntity<List<Activity>> getUserActivity(@PathVariable Long userId) {
         try {
-            List<Activity> activities = activityRepository.findByUser_Id(userId);
-            return ResponseEntity.ok(activities);
+            return ResponseEntity.ok(holdingService.getUserActivity(userId));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(null);
         }
     }
-
 }
