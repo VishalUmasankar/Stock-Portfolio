@@ -18,7 +18,7 @@ public class UserService {
     private UserRepository userRepository;
 
     public User saveUser(User user) {
-    	if (userRepository.findByEmail(user.getemail()) != null) {
+    	if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new UserAlreadyExistsException("Email already registered");
         }
         
@@ -29,12 +29,14 @@ public class UserService {
     }
 
     public LoginResponse login(String email, String password) {
-        User user = userRepository.findByEmail(email);
+    	User user = userRepository.findByEmail(email)
+    		    .orElseThrow(() -> new UserNotFoundException("Invalid email or password"));
+
         if (user == null || !user.getPassword().equals(password)) {
             throw new UserNotFoundException("Invalid email or password");
         }
 
-        return new LoginResponse(user.getId(),user.getUsername(),user.getemail());
+        return new LoginResponse(user.getId(),user.getUsername(),user.getEmail());
     }
   
 }

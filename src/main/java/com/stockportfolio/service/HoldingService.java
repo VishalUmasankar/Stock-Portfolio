@@ -38,14 +38,14 @@ public class HoldingService {
 
         if (existingHolding != null) {
             existingHolding.setQuantity(existingHolding.getQuantity() + holdingRequest.getQuantity());
-            existingHolding.setCurrent_price(currentPrice);
+            existingHolding.setCurrentPrice(currentPrice);
             existingHolding.setAlert(holdingRequest.getAlert());
             existingHolding.setAbove(holdingRequest.getAbove());
             existingHolding.setBelow(holdingRequest.getBelow());
             holdingRepository.save(existingHolding);
         } else {
             holdingRequest.setUserDetails(user);
-            holdingRequest.setCurrent_price(currentPrice);
+            holdingRequest.setCurrentPrice(currentPrice);
             holdingRepository.save(holdingRequest);
         }
 
@@ -85,7 +85,7 @@ public class HoldingService {
         activity.setStockSymbol(existing.getStockSymbol());
         activity.setAction("SELL");
         activity.setQuantity(sellQty);
-        activity.setPrice(existing.getCurrent_price());
+        activity.setPrice(existing.getCurrentPrice());
         activity.setTimestamp(LocalDateTime.now());
         activityRepository.save(activity);
 

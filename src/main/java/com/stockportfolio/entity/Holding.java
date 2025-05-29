@@ -3,91 +3,52 @@ package com.stockportfolio.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="Holdings")
+@Table(name = "holdings")
 public class Holding {
-	
-	@Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-	private long id;
-	
-	@ManyToOne
-	@JoinColumn(name="user_id")
-	private User userDetails;
-	
-	private String stockSymbol;
-	
-	private int quantity;
-	
-	private Double current_price;
-	
-	private String Alert;
-	
-	private Double Above;
-	
-	private Double Below;
-	
-	public long getId() {
-		return id;
-	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	public User getUserDetails() {
-		return userDetails;
-	}
+    @Column(name = "stock_symbol", nullable = false)
+    private String stockSymbol;
 
-	public void setUserDetails(User userDetails) {
-		this.userDetails = userDetails;
-	}
+    @Column(name = "current_price")
+    private Double currentPrice;
 
-	public String getStockSymbol() {
-		return stockSymbol;
-	}
+    private String alert;
+    private Double above;
+    private Double below;
 
-	public void setStockSymbol(String stockSymbol) {
-		this.stockSymbol = stockSymbol;
-	}
+    @Column(name = "quantity")
+    private Integer quantity;
 
-	public int getQuantity() {
-		return quantity;
-	}
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User userDetails;
 
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-	public Double getCurrent_price() {
-		return current_price;
-	}
+    public String getStockSymbol() { return stockSymbol; }
+    public void setStockSymbol(String stockSymbol) { this.stockSymbol = stockSymbol; }
 
-	public void setCurrent_price(Double current_price) {
-		this.current_price = current_price;
-	}
+    public Double getCurrentPrice() { return currentPrice; }
+    public void setCurrentPrice(Double currentPrice) { this.currentPrice = currentPrice; }
 
-	public String getAlert() {
-		return Alert;
-	}
+    public String getAlert() { return alert; }
+    public void setAlert(String alert) { this.alert = alert; }
 
-	public void setAlert(String alert) {
-		Alert = alert;
-	}
+    public Double getAbove() { return above; }
+    public void setAbove(Double above) { this.above = above; }
 
-	public Double getAbove() {
-		return Above;
-	}
+    public Double getBelow() { return below; }
+    public void setBelow(Double below) { this.below = below; }
 
-	public void setAbove(Double above) {
-		Above = above;
-	}
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
 
-	public Double getBelow() {
-		return Below;
-	}
-
-	public void setBelow(Double below) {
-		Below = below;
-	}
-
+    public User getUserDetails() { return userDetails; }
+    public void setUserDetails(User userDetails) { this.userDetails = userDetails; }
 }

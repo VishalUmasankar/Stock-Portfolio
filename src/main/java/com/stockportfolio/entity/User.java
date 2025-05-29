@@ -1,14 +1,16 @@
 package com.stockportfolio.entity;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import java.util.List;
 
 @Entity
-
+@Table(name = "user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -20,43 +22,22 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    
-    public long getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "userDetails", cascade = CascadeType.ALL)
+    private List<Holding> holdings;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    
-    public String getemail(){
-    	return email;
-    }
-    
-    public void setemail(String email) {
-    	this.email = email;
-    }
+    public List<Holding> getHoldings() { return holdings; }
+    public void setHoldings(List<Holding> holdings) { this.holdings = holdings; }
 }
-
-	    
-	    
-	    
-
-
-    
