@@ -23,9 +23,7 @@ public class AlertMonitorService {
     @Autowired
     private EmailService emailService;
 
-
-    @Scheduled(fixedRate = 500000) 
-
+    @Scheduled(fixedRate = 60000) // every 60 seconds
     public void checkAlerts() {
         List<Holding> holdings = holdingRepository.findByAlert("ON");
 
