@@ -1,6 +1,9 @@
 package com.stockportfolio.controller;
 
 import com.stockportfolio.dto.LoginRequest;
+import com.stockportfolio.entity.Activity;
+import com.stockportfolio.repository.ActivityRepository;
+
 import com.stockportfolio.dto.LoginResponse;
 import com.stockportfolio.entity.Holding;
 import com.stockportfolio.entity.User;
@@ -22,6 +25,10 @@ public class UserController {
 
     @Autowired
     private HoldingService holdingService;
+    
+    @Autowired
+    private ActivityRepository activityRepository;
+
 
     @PostMapping("/register")
     public User createUser(@RequestBody User user) {
@@ -59,4 +66,15 @@ public class UserController {
             return ResponseEntity.internalServerError().body(null);
         }
     }
+    
+    @GetMapping("/activity/user/{userId}")
+    public ResponseEntity<List<Activity>> getUserActivity(@PathVariable Long userId) {
+        try {
+            List<Activity> activities = activityRepository.findByUser_Id(userId);
+            return ResponseEntity.ok(activities);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(null);
+        }
+    }
+
 }
