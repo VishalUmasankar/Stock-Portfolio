@@ -1,12 +1,15 @@
 package com.stockportfolio.service;
 
 import com.stockportfolio.entity.Holding;
+import com.stockportfolio.entity.Activity;
+import com.stockportfolio.repository.ActivityRepository;
+import java.time.LocalDateTime;
+
 import com.stockportfolio.entity.User;
 import com.stockportfolio.repository.HoldingRepository;
 import com.stockportfolio.repository.UserRepository;
 import com.stockportfolio.util.Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +22,9 @@ public class HoldingService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ActivityRepository activityRepository;
 
     public String buyStock(Holding holdingRequest) throws Exception {
         User user = userRepository.findById(holdingRequest.getUserDetails().getId())
@@ -43,6 +49,16 @@ public class HoldingService {
             holdingRepository.save(holdingRequest);
         }
 
+        // ✅ Log activity for buy
+        Activity activity = new Activity();
+        activity.setUser(user);
+        activity.setStockSymbol(holdingRequest.getStockSymbol());
+        activity.setAction("BUY");
+        activity.setQuantity(holdingRequest.getQuantity());
+        activity.setPrice(currentPrice);
+        activity.setTimestamp(LocalDateTime.now());
+        activityRepository.save(activity);
+
         return "Stock bought and updated.";
     }
 
@@ -62,6 +78,16 @@ public class HoldingService {
             existing.setQuantity(existing.getQuantity() - sellQty);
             holdingRepository.save(existing);
         }
+
+        // ✅ Log activity for sell
+        Activity activity = new Activity();
+        activity.setUser(existing.getUserDetails());
+        activity.setStockSymbol(existing.getStockSymbol());
+        activity.setAction("SELL");
+        activity.setQuantity(sellQty);
+        activity.setPrice(existing.getCurrent_price());
+        activity.setTimestamp(LocalDateTime.now());
+        activityRepository.save(activity);
 
         return "Stock sold successfully.";
     }
