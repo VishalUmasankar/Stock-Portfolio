@@ -1,30 +1,23 @@
 package com.stockportfolio.controller;
 
 
-
-
-import com.stockportfolio.service.EmailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.stockportfolio.service.EmailServiceInterface;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/mail")
 public class MailController {
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailServiceInterface emailService;
+
+    public MailController(EmailServiceInterface emailService) {
+        this.emailService = emailService;
+    }
 
     @PostMapping("/send")
-    public String triggerMail(@RequestBody String keyword) {
-        if (keyword.equalsIgnoreCase("mail")) {
-            emailService.sendAlertMail(
-                "recipient-email@example.com", 
-                "Stock Alert", 
-                "The stock value has triggered an alert!"
-            );
-            return "Mail sent.";
-        } else {
-            return "No action taken.";
-        }
-    }
-}
+    public String sendMail(@RequestParam String to,
+                           @RequestParam String subject,
+                           @RequestParam String body) {
+        emailService.sendAlertMail(to, subject, body);
+        return "Mail sent successfully";
+
