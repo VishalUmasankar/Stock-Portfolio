@@ -3,12 +3,15 @@ package com.stockportfolio.controller;
 import com.stockportfolio.dto.LoginRequest;
 import com.stockportfolio.dto.LoginResponse;
 import com.stockportfolio.dto.RegistrationRequest;
+
 import com.stockportfolio.entity.Activity;
 import com.stockportfolio.entity.Holding;
 import com.stockportfolio.entity.User;
 import com.stockportfolio.exception.InvalidEmailFormatException;
+
 import com.stockportfolio.service.HoldingServiceInterface;
 import com.stockportfolio.service.UserServiceInterface;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,10 +24,12 @@ public class UserController {
     private final UserServiceInterface userService;
     private final HoldingServiceInterface holdingService;
 
+
     public UserController(UserServiceInterface userService, HoldingServiceInterface holdingService) {
         this.userService = userService;
         this.holdingService = holdingService;
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@RequestBody RegistrationRequest request) {

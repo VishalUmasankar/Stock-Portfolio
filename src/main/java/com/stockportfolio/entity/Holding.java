@@ -1,3 +1,4 @@
+
 	package com.stockportfolio.entity;
 	
 	import jakarta.persistence.*;
@@ -90,4 +91,4 @@
 			Below = below;
 		}
 	
-	}
+

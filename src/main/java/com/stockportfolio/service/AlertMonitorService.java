@@ -23,7 +23,9 @@ public class AlertMonitorService {
     @Autowired
     private EmailService emailService;
 
+
     @Scheduled(fixedRate = 500000) 
+
     public void checkAlerts() {
         List<Holding> holdings = holdingRepository.findByAlert("ON");
 
@@ -34,11 +36,13 @@ public class AlertMonitorService {
 
             if ((above != null && currentPrice > above) || (below != null && currentPrice < below)) {
                 User user = userRepository.findById(h.getId()).orElse(null);
+
                 if (user != null && user.getemail() != null) {
                     String subject = "Stock Alert: " + h.getStockSymbol();
                     String body = String.format("Current price of %s is %.2f which crossed your set limit!",
                             h.getStockSymbol(), currentPrice);
                     emailService.sendAlertMail(user.getemail(), subject, body);
+
                 }
             }
         }

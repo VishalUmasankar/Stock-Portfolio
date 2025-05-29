@@ -1,11 +1,14 @@
 package com.stockportfolio.controller;
 
+
 import com.stockportfolio.service.HoldingServiceInterface;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/alert")
 public class AlertController {
+
 
     private final HoldingServiceInterface holdingService;
 
@@ -23,3 +26,4 @@ public class AlertController {
         return holdingService.updatePrice(id, price);
     }
 }
+

@@ -8,7 +8,7 @@ public class HoldingDto {
     private double gain;
     private double gainPercent;
 
-    // Constructors
+
     public HoldingDto() {}
 
     public HoldingDto(String stockSymbol, int quantity, double currentPrice, double buyPrice, double gain, double gainPercent) {
