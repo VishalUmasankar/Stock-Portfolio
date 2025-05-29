@@ -15,6 +15,16 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(UserAlreadyExistsException.class)
     public ResponseEntity<String> handleUserAlreadyExists(UserAlreadyExistsException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT); // 409
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT); 
+    }
+    
+    @ExceptionHandler(InvalidEmailFormatException.class)
+    public ResponseEntity<String> handleInvalidEmailFormatException(InvalidEmailFormatException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT); 
+    }
+    
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleUserNotFound(Exception ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
 }

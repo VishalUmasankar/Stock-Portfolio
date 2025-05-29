@@ -20,7 +20,8 @@ public class AlertScheduler {
     @Autowired
     private EmailService emailService;
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 300000)
+
     public void checkAlerts() {
         System.out.println("Checking alerts...");
 
@@ -28,7 +29,7 @@ public class AlertScheduler {
         System.out.println("Found " + holdings.size() + " holdings with alerts ON");
 
         for (Holding holding : holdings) {
-            Double price = holding.getCurrentPrice();
+            Double price = holding.getCurrent_price();
             Double above = holding.getAbove();
             Double below = holding.getBelow();
             String stockSymbol = holding.getStockSymbol();
@@ -36,27 +37,42 @@ public class AlertScheduler {
             System.out.println("Checking: " + stockSymbol + " | Price: " + price + " | Above: " + above + " | Below: " + below);
 
             if (price != null) {
-                boolean shouldAlert = false;
+                boolean aboveAlert = false;
+                boolean belowAlert = false;
 
                 if (above != null && price >= above) {
-                    shouldAlert = true;
+                    aboveAlert = true;
                     System.out.println("Price above threshold!");
                 }
 
                 if (below != null && price <= below) {
-                    shouldAlert = true;
+
+                    belowAlert = true;
                     System.out.println("Price below threshold!");
                 }
 
-                if (shouldAlert) {
+                if (aboveAlert) {
                     User user = holding.getUserDetails(); // directly from relation
                     try {
                         emailService.sendAlertMail(
-                            user.getEmail(),
+                            user.getemail(),
                             "Stock Alert: " + stockSymbol,
-                            "Current price: " + price + " has crossed your alert threshold."
+                            "Current price: " + price + " has crossed your ABOVE alert threshold."
                         );
-                        System.out.println("Alert email sent to: " + user.getEmail());
+                        System.out.println("Alert email sent to: " + user.getemail());
+                    } catch (Exception e) {
+                        System.out.println("Failed to send email: " + e.getMessage());
+                    }
+                }
+                else if(belowAlert) {
+                	User user = holding.getUserDetails(); // directly from relation
+                    try {
+                        emailService.sendAlertMail(
+                            user.getemail(),
+                            "Stock Alert: " + stockSymbol,
+                            "Current price: " + price + " has crossed your BELOW alert threshold."
+                        );
+                        System.out.println("Alert email sent to: " + user.getemail());
                     } catch (Exception e) {
                         System.out.println("Failed to send email: " + e.getMessage());
                     }

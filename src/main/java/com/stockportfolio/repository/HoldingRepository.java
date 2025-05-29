@@ -12,6 +12,6 @@ public interface HoldingRepository extends JpaRepository<Holding, Long> {
     Optional<Holding> findByUserDetails_IdAndStockSymbol(Long userId, String stockSymbol);
     
     List<Holding> findAllByUserDetails_Id(Long userId);
-    
+
     List<Holding> findByAlert(String alert);
 }

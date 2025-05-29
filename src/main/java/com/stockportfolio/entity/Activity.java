@@ -15,12 +15,11 @@ public class Activity {
     private User user;
 
     private String stockSymbol;
-    private String action; // BUY or SELL
+    private String action; 
     private int quantity;
     private double price;
     private LocalDateTime timestamp;
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

@@ -49,7 +49,6 @@ public class HoldingService {
             holdingRepository.save(holdingRequest);
         }
 
-        // ✅ Log activity for buy
         Activity activity = new Activity();
         activity.setUser(user);
         activity.setStockSymbol(holdingRequest.getStockSymbol());
@@ -79,7 +78,6 @@ public class HoldingService {
             holdingRepository.save(existing);
         }
 
-        // ✅ Log activity for sell
         Activity activity = new Activity();
         activity.setUser(existing.getUserDetails());
         activity.setStockSymbol(existing.getStockSymbol());

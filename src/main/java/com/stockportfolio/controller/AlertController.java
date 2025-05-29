@@ -32,7 +32,7 @@ public class AlertController {
         Optional<Holding> optional = holdingRepository.findById(id);
         if (optional.isPresent()) {
             Holding holding = optional.get();
-            holding.setCurrentPrice(price);
+            holding.setCurrent_price(price);
             holdingRepository.save(holding);
             return "Price updated to: " + price;
         } else {

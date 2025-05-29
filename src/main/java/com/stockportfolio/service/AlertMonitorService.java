@@ -28,17 +28,19 @@ public class AlertMonitorService {
         List<Holding> holdings = holdingRepository.findByAlert("ON");
 
         for (Holding h : holdings) {
-            Double currentPrice = h.getCurrentPrice();
+            Double currentPrice = h.getCurrent_price();
             Double above = h.getAbove();
             Double below = h.getBelow();
 
             if ((above != null && currentPrice > above) || (below != null && currentPrice < below)) {
                 User user = userRepository.findById(h.getId()).orElse(null);
-                if (user != null && user.getEmail() != null) {
+
+                if (user != null && user.getemail() != null) {
                     String subject = "Stock Alert: " + h.getStockSymbol();
                     String body = String.format("Current price of %s is %.2f which crossed your set limit!",
                             h.getStockSymbol(), currentPrice);
-                    emailService.sendAlertMail(user.getEmail(), subject, body);
+                    emailService.sendAlertMail(user.getemail(), subject, body);
+
                 }
             }
         }
