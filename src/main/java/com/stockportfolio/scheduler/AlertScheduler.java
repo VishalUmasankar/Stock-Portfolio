@@ -54,11 +54,11 @@ public class AlertScheduler {
                     User user = holding.getUserDetails(); // directly from relation
                     try {
                         emailService.sendAlertMail(
-                            user.getemail(),
+                            user.getEmail(),
                             "Stock Alert: " + stockSymbol,
                             "Current price: " + price + " has crossed your ABOVE alert threshold."
                         );
-                        System.out.println("Alert email sent to: " + user.getemail());
+                        System.out.println("Alert email sent to: " + user.getEmail());
                     } catch (Exception e) {
                         System.out.println("Failed to send email: " + e.getMessage());
                     }
@@ -67,11 +67,11 @@ public class AlertScheduler {
                 	User user = holding.getUserDetails(); // directly from relation
                     try {
                         emailService.sendAlertMail(
-                            user.getemail(),
+                            user.getEmail(),
                             "Stock Alert: " + stockSymbol,
                             "Current price: " + price + " has crossed your BELOW alert threshold."
                         );
-                        System.out.println("Alert email sent to: " + user.getemail());
+                        System.out.println("Alert email sent to: " + user.getEmail());
                     } catch (Exception e) {
                         System.out.println("Failed to send email: " + e.getMessage());
                     }
