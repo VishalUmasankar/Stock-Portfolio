@@ -1,3 +1,4 @@
+
 package com.stockportfolio.dto;
 
 public class HoldingDto {
@@ -69,3 +70,4 @@ public class HoldingDto {
         this.gainPercent = gainPercent;
     }
 }
+

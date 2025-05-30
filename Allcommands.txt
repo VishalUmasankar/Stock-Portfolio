@@ -1,0 +1,55 @@
+[9:44 am, 30/5/2025] Harish SRM CG: http://localhost:8080/api/holdings/buy
+
+
+{
+  "userDetails": {
+    "id": 5
+  },
+  "stockSymbol": "AAPL",
+  "quantity": 20,
+  "alert": "ON",
+  "above": 200,
+  "below": 150
+}
+[9:45 am, 30/5/2025] Harish SRM CG: http://localhost:8080/api/holdings/sell
+
+
+{
+  "userDetails": {
+    "id": 5
+  },
+  "stockSymbol": "AAPL",
+  "quantity": 10
+}
+[9:45 am, 30/5/2025] Harish SRM CG: http://localhost:8080/api/registerhttp://localhost:8080/api/register
+
+{
+    "username":"Utkarsh",
+    "password":"ut123",
+    "email":"utk123@gmail.com"
+}
+[9:46 am, 30/5/2025] Harish SRM CG: http://localhost:8080/api/login
+
+
+{
+    "email":"utk123@gmail.com",
+    "password":"ut123"
+}
+[9:46 am, 30/5/2025] Harish SRM CG: Create database springboot_db;
+create user 'team_user'@'%' identified by 'localpass123';
+grant all privileges on springboot_db.* to 'team_user'@'%';
+flush privileges;
+use springboot_db;
+		
+select * from user;
+truncate user;
+select * from activity;
+truncate activity;
+update holdings set alert='ON' where id = 1;
+select * from holdings;
+drop table user_details;
+truncate holdings;
+drop table user;
+drop table user_details;
+drop table activity;
+drop table holdings;
