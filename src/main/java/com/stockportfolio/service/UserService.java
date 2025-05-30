@@ -34,7 +34,7 @@ public class UserService implements UserServiceInterface {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(request.getPassword());
-        user.setemail(request.getEmail());
+        user.setEmail(request.getEmail());
 
         return userRepository.save(user);
     }
@@ -45,6 +45,6 @@ public class UserService implements UserServiceInterface {
         if (user == null || !user.getPassword().equals(password)) {
             throw new UserNotFoundException("Invalid email or password");
         }
-        return new LoginResponse(user.getId(), user.getUsername(), user.getemail());
+        return new LoginResponse(user.getId(), user.getUsername(), user.getEmail());
     }
 }
