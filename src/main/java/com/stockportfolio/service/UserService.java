@@ -1,3 +1,4 @@
+
 package com.stockportfolio.service;
 
 import com.stockportfolio.dto.LoginResponse;
@@ -10,13 +11,11 @@ import com.stockportfolio.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class UserService implements UserServiceInterface {
 
-	@Autowired
-	private UserRepository userRepository;
-
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public User saveUser(RegistrationRequest request) {
@@ -41,17 +40,12 @@ public class UserService implements UserServiceInterface {
         return userRepository.save(user);
     }
 
-
     @Override
     public LoginResponse login(String email, String password) {
-    	User user = userRepository.findByEmail(email)
-    		    .orElseThrow(() -> new UserNotFoundException("Invalid email or password"));
-
+        User user = userRepository.findByEmail(email);
         if (user == null || !user.getPassword().equals(password)) {
             throw new UserNotFoundException("Invalid email or password");
         }
-
         return new LoginResponse(user.getId(), user.getUsername(), user.getemail());
-
     }
 }

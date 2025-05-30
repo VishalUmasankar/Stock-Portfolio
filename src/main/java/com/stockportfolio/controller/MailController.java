@@ -1,5 +1,5 @@
-package com.stockportfolio.controller;
 
+package com.stockportfolio.controller;
 
 import com.stockportfolio.service.EmailServiceInterface;
 import org.springframework.web.bind.annotation.*;
@@ -20,4 +20,5 @@ public class MailController {
                            @RequestParam String body) {
         emailService.sendAlertMail(to, subject, body);
         return "Mail sent successfully";
-
+    }
+}

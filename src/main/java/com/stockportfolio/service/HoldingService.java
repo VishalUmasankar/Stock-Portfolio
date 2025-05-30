@@ -1,3 +1,4 @@
+
 package com.stockportfolio.service;
 
 import com.stockportfolio.entity.Activity;
@@ -39,14 +40,14 @@ public class HoldingService implements HoldingServiceInterface {
 
         if (existingHolding != null) {
             existingHolding.setQuantity(existingHolding.getQuantity() + holdingRequest.getQuantity());
-            existingHolding.setCurrentPrice(currentPrice);
+            existingHolding.setCurrent_price(currentPrice);
             existingHolding.setAlert(holdingRequest.getAlert());
             existingHolding.setAbove(holdingRequest.getAbove());
             existingHolding.setBelow(holdingRequest.getBelow());
             holdingRepository.save(existingHolding);
         } else {
             holdingRequest.setUserDetails(user);
-            holdingRequest.setCurrentPrice(currentPrice);
+            holdingRequest.setCurrent_price(currentPrice);
             holdingRepository.save(holdingRequest);
         }
 
@@ -85,7 +86,7 @@ public class HoldingService implements HoldingServiceInterface {
         activity.setStockSymbol(existing.getStockSymbol());
         activity.setAction("SELL");
         activity.setQuantity(sellQty);
-        activity.setPrice(existing.getCurrentPrice());
+        activity.setPrice(existing.getCurrent_price());
         activity.setTimestamp(LocalDateTime.now());
         activityRepository.save(activity);
 
@@ -128,4 +129,3 @@ public class HoldingService implements HoldingServiceInterface {
         }
     }
 }
-

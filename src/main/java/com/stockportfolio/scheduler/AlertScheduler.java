@@ -1,3 +1,4 @@
+
 package com.stockportfolio.scheduler;
 
 
@@ -21,7 +22,6 @@ public class AlertScheduler {
     private EmailService emailService;
 
     @Scheduled(fixedRate = 300000)
-
     public void checkAlerts() {
         System.out.println("Checking alerts...");
 
@@ -46,7 +46,6 @@ public class AlertScheduler {
                 }
 
                 if (below != null && price <= below) {
-
                     belowAlert = true;
                     System.out.println("Price below threshold!");
                 }
@@ -81,3 +80,4 @@ public class AlertScheduler {
         }
     }
 }
+
