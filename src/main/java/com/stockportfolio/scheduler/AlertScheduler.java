@@ -1,3 +1,4 @@
+
 package com.stockportfolio.scheduler;
 
 
@@ -79,3 +80,4 @@ public class AlertScheduler {
         }
     }
 }
+
