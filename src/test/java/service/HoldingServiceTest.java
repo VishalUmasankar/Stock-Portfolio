@@ -1,6 +1,5 @@
 package service;
 
-
 import com.stockportfolio.entity.Activity;
 import com.stockportfolio.entity.Holding;
 import com.stockportfolio.entity.User;

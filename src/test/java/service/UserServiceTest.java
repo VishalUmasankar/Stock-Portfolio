@@ -1,7 +1,5 @@
 package service;
 
-
-
 import com.stockportfolio.dto.LoginResponse;
 import com.stockportfolio.dto.RegistrationRequest;
 import com.stockportfolio.entity.User;

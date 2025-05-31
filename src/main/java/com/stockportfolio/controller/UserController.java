@@ -86,8 +86,4 @@ public class UserController {
             return ResponseEntity.internalServerError().body("Error updating holding alert: " + e.getMessage());
         }
     }
-
-    
-
-
 }
