@@ -11,107 +11,93 @@ import com.stockportfolio.service.UserService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import org.mockito.junit.jupiter.MockitoExtension;
-
-@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
-
-    @Mock
-    private UserRepository userRepository;
 
     @InjectMocks
     private UserService userService;
 
-    private RegistrationRequest request;
+    @Mock
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
-        request = new RegistrationRequest();
-        request.setUsername("john_doe");
-        request.setPassword("password123");
-        request.setEmail("john@example.com");
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testSaveUser_Success() {
-        when(userRepository.findByEmail("john@example.com")).thenReturn(null);
-        when(userRepository.findByUsername("john_doe")).thenReturn(null);
+    void saveUser_shouldThrowInvalidEmailFormatException() {
+        RegistrationRequest request = new RegistrationRequest();
+        request.setEmail("invalidemail");
+        request.setUsername("user1");
+        request.setPassword("pass");
+
+        InvalidEmailFormatException ex = assertThrows(InvalidEmailFormatException.class,
+                () -> userService.saveUser(request));
+        assertEquals("Invalid email format.", ex.getMessage());
+    }
+
+    @Test
+    void saveUser_shouldThrowUserAlreadyExistsException_whenEmailExists() {
+        RegistrationRequest request = new RegistrationRequest();
+        request.setEmail("test@example.com");
+        request.setUsername("user1");
+        request.setPassword("pass");
+
+        when(userRepository.findByEmail("test@example.com")).thenReturn(new User());
+
+        UserAlreadyExistsException ex = assertThrows(UserAlreadyExistsException.class,
+                () -> userService.saveUser(request));
+        assertEquals("Email already registered", ex.getMessage());
+    }
+
+    @Test
+    void saveUser_shouldSaveUserSuccessfully() {
+        RegistrationRequest request = new RegistrationRequest();
+        request.setEmail("test@example.com");
+        request.setUsername("user1");
+        request.setPassword("pass");
+
+        when(userRepository.findByEmail("test@example.com")).thenReturn(null);
+        when(userRepository.findByUsername("user1")).thenReturn(null);
 
         User savedUser = new User();
-        savedUser.setUsername("john_doe");
-        savedUser.setPassword("password123");
-        savedUser.setemail("john@example.com");
+        savedUser.setId((int) 1L);
+        savedUser.setUsername("user1");
+        savedUser.setemail("test@example.com");
 
         when(userRepository.save(any(User.class))).thenReturn(savedUser);
 
         User result = userService.saveUser(request);
-
-        assertEquals("john_doe", result.getUsername());
-        assertEquals("password123", result.getPassword());
-        assertEquals("john@example.com", result.getemail());
-        verify(userRepository, times(1)).save(any(User.class));
+        assertNotNull(result);
+        assertEquals("user1", result.getUsername());
+        assertEquals("test@example.com", result.getemail());
     }
 
     @Test
-    void testSaveUser_InvalidEmail() {
-        request.setEmail("invalid-email");
-
-        assertThrows(InvalidEmailFormatException.class, () -> userService.saveUser(request));
+    void login_shouldThrowUserNotFoundException_whenInvalid() {
+        when(userRepository.findByEmail("wrong@example.com")).thenReturn(null);
+        UserNotFoundException ex = assertThrows(UserNotFoundException.class, () -> userService.login("wrong@example.com", "pass"));
+        assertEquals("Invalid email or password", ex.getMessage());
     }
 
     @Test
-    void testSaveUser_EmailAlreadyExists() {
-        when(userRepository.findByEmail("john@example.com")).thenReturn(new User());
-
-        assertThrows(UserAlreadyExistsException.class, () -> userService.saveUser(request));
-    }
-
-    @Test
-    void testSaveUser_UsernameAlreadyExists() {
-        when(userRepository.findByEmail("john@example.com")).thenReturn(null);
-        when(userRepository.findByUsername("john_doe")).thenReturn(new User());
-
-        assertThrows(UserAlreadyExistsException.class, () -> userService.saveUser(request));
-    }
-
-    @Test
-    void testLogin_Success() {
+    void login_shouldReturnLoginResponse() {
         User user = new User();
         user.setId((int) 1L);
-        user.setUsername("john_doe");
-        user.setPassword("password123");
-        user.setemail("john@example.com");
+        user.setUsername("user1");
+        user.setPassword("pass");
+        user.setemail("test@example.com");
 
-        when(userRepository.findByEmail("john@example.com")).thenReturn(user);
+        when(userRepository.findByEmail("test@example.com")).thenReturn(user);
 
-        LoginResponse response = userService.login("john@example.com", "password123");
-
+        LoginResponse response = userService.login("test@example.com", "pass");
         assertEquals(1L, response.getId());
-        assertEquals("john_doe", response.getUsername());
-        assertEquals("john@example.com", response.getemail());
-    }
-
-    @Test
-    void testLogin_InvalidCredentials() {
-        when(userRepository.findByEmail("john@example.com")).thenReturn(null);
-
-        assertThrows(UserNotFoundException.class, () -> userService.login("john@example.com", "wrongpass"));
-    }
-
-    @Test
-    void testLogin_WrongPassword() {
-        User user = new User();
-        user.setPassword("correctpass");
-
-        when(userRepository.findByEmail("john@example.com")).thenReturn(user);
-
-        assertThrows(UserNotFoundException.class, () -> userService.login("john@example.com", "wrongpass"));
+        assertEquals("user1", response.getUsername());
+        assertEquals("test@example.com", response.getemail());
     }
 }

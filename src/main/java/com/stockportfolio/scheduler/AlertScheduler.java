@@ -1,4 +1,3 @@
-
 package com.stockportfolio.scheduler;
 
 
@@ -51,27 +50,27 @@ public class AlertScheduler {
                 }
 
                 if (aboveAlert) {
-                    User user = holding.getUserDetails(); // directly from relation
+                    User user = holding.getUserDetails(); 
                     try {
                         emailService.sendAlertMail(
-                            user.getEmail(),
+                            user.getemail(),
                             "Stock Alert: " + stockSymbol,
                             "Current price: " + price + " has crossed your ABOVE alert threshold."
                         );
-                        System.out.println("Alert email sent to: " + user.getEmail());
+                        System.out.println("Alert email sent to: " + user.getemail());
                     } catch (Exception e) {
                         System.out.println("Failed to send email: " + e.getMessage());
                     }
                 }
                 else if(belowAlert) {
-                	User user = holding.getUserDetails(); // directly from relation
+                	User user = holding.getUserDetails(); 
                     try {
                         emailService.sendAlertMail(
-                            user.getEmail(),
+                            user.getemail(),
                             "Stock Alert: " + stockSymbol,
                             "Current price: " + price + " has crossed your BELOW alert threshold."
                         );
-                        System.out.println("Alert email sent to: " + user.getEmail());
+                        System.out.println("Alert email sent to: " + user.getemail());
                     } catch (Exception e) {
                         System.out.println("Failed to send email: " + e.getMessage());
                     }
@@ -80,4 +79,3 @@ public class AlertScheduler {
         }
     }
 }
-

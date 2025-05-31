@@ -1,4 +1,3 @@
-
 package com.stockportfolio.controller;
 
 import com.stockportfolio.service.HoldingServiceInterface;
@@ -23,4 +22,5 @@ public class AlertController {
     public String updatePrice(@PathVariable Long id, @RequestParam Double price) {
         return holdingService.updatePrice(id, price);
     }
+    
 }

@@ -1,4 +1,3 @@
-
 package com.stockportfolio.dto;
 
 public class HoldingDto {
@@ -9,7 +8,6 @@ public class HoldingDto {
     private double gain;
     private double gainPercent;
 
-    // Constructors
     public HoldingDto() {}
 
     public HoldingDto(String stockSymbol, int quantity, double currentPrice, double buyPrice, double gain, double gainPercent) {
@@ -69,5 +67,4 @@ public class HoldingDto {
     public void setGainPercent(double gainPercent) {
         this.gainPercent = gainPercent;
     }
-}
-
+} 

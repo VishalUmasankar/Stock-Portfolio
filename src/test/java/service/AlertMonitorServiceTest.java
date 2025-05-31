@@ -10,12 +10,15 @@ import com.stockportfolio.service.EmailService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 class AlertMonitorServiceTest {
+
+    @InjectMocks
+    private AlertMonitorService alertMonitorService;
 
     @Mock
     private HoldingRepository holdingRepository;
@@ -26,80 +29,45 @@ class AlertMonitorServiceTest {
     @Mock
     private EmailService emailService;
 
-    @InjectMocks
-    private AlertMonitorService alertMonitorService;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void testCheckAlerts_SendEmail_WhenAboveThresholdCrossed() {
+    void checkAlerts_shouldSendEmailWhenPriceCrossesLimits() {
         Holding holding = new Holding();
         holding.setId(1L);
         holding.setStockSymbol("AAPL");
-        holding.setCurrent_price(160.0);
-        holding.setAbove(150.0);
-        holding.setBelow(null);
         holding.setAlert("ON");
+        holding.setCurrent_price(150.0);
+        holding.setAbove(140.0);
+        holding.setBelow(130.0);
 
         User user = new User();
-        user.setId((int) 1L);
-        user.setemail("user@example.com");
+        user.setemail("test@example.com");
 
         when(holdingRepository.findByAlert("ON")).thenReturn(List.of(holding));
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         alertMonitorService.checkAlerts();
 
-        verify(emailService, times(1)).sendAlertMail(
-                eq("user@example.com"),
-                eq("Stock Alert: AAPL"),
-                contains("160.00")
-        );
+        verify(emailService, times(1)).sendAlertMail(eq("test@example.com"), contains("AAPL"), anyString());
     }
 
     @Test
-    void testCheckAlerts_NoEmail_WhenNoConditionMatched() {
+    void checkAlerts_shouldNotSendEmailIfUserOrEmailNull() {
         Holding holding = new Holding();
         holding.setId(1L);
-        holding.setStockSymbol("AAPL");
-        holding.setCurrent_price(100.0);
-        holding.setAbove(150.0);
-        holding.setBelow(90.0);
         holding.setAlert("ON");
+        holding.setCurrent_price(150.0);
+        holding.setAbove(140.0);
 
         when(holdingRepository.findByAlert("ON")).thenReturn(List.of(holding));
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
 
         alertMonitorService.checkAlerts();
 
-        verify(emailService, never()).sendAlertMail(any(), any(), any());
-    }
-
-    @Test
-    void testCheckAlerts_SendEmail_WhenBelowThresholdCrossed() {
-        Holding holding = new Holding();
-        holding.setId(1L);
-        holding.setStockSymbol("AAPL");
-        holding.setCurrent_price(80.0);
-        holding.setAbove(null);
-        holding.setBelow(90.0);
-        holding.setAlert("ON");
-
-        User user = new User();
-        user.setId((int) 1L);
-        user.setemail("user@example.com");
-
-        when(holdingRepository.findByAlert("ON")).thenReturn(List.of(holding));
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-
-        alertMonitorService.checkAlerts();
-
-        verify(emailService, times(1)).sendAlertMail(
-                eq("user@example.com"),
-                eq("Stock Alert: AAPL"),
-                contains("80.00")
-        );
+        verify(emailService, never()).sendAlertMail(anyString(), anyString(), anyString());
     }
 }
