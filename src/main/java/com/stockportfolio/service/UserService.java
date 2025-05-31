@@ -47,4 +47,22 @@ public class UserService implements UserServiceInterface {
         }
         return new LoginResponse(user.getId(), user.getUsername(), user.getemail());
     }
+    @Override
+    public User updateUser(User updatedUser) {
+        User existing = userRepository.findById(updatedUser.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        existing.setUsername(updatedUser.getUsername());
+        existing.setPassword(updatedUser.getPassword());
+        existing.setemail(updatedUser.getemail());
+        return userRepository.save(existing);
+    }
+
+    @Override
+    public void deleteUser(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        userRepository.delete(user);
+    }
+
 }

@@ -50,7 +50,7 @@ public class AlertScheduler {
                 }
 
                 if (aboveAlert) {
-                    User user = holding.getUserDetails(); // directly from relation
+                    User user = holding.getUserDetails(); 
                     try {
                         emailService.sendAlertMail(
                             user.getemail(),
@@ -63,7 +63,7 @@ public class AlertScheduler {
                     }
                 }
                 else if(belowAlert) {
-                	User user = holding.getUserDetails(); // directly from relation
+                	User user = holding.getUserDetails(); 
                     try {
                         emailService.sendAlertMail(
                             user.getemail(),

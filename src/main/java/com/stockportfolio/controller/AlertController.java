@@ -22,4 +22,5 @@ public class AlertController {
     public String updatePrice(@PathVariable Long id, @RequestParam Double price) {
         return holdingService.updatePrice(id, price);
     }
+    
 }

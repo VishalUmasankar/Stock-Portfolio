@@ -1,5 +1,6 @@
 package com.stockportfolio.service;
 
+import com.stockportfolio.dto.HoldingDto;
 import com.stockportfolio.entity.Activity;
 import com.stockportfolio.entity.Holding;
 import com.stockportfolio.entity.User;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,13 +40,25 @@ public class HoldingService implements HoldingServiceInterface {
         double currentPrice = Util.getLatestPrice(holdingRequest.getStockSymbol());
 
         if (existingHolding != null) {
-            existingHolding.setQuantity(existingHolding.getQuantity() + holdingRequest.getQuantity());
+            // Calculate new average buy price weighted by quantity
+            int oldQty = existingHolding.getQuantity();
+            double oldBuyPrice = existingHolding.getBuyPrice() != null ? existingHolding.getBuyPrice() : 0.0;
+
+            int newQty = oldQty + holdingRequest.getQuantity();
+            double newBuyPrice = ((oldBuyPrice * oldQty) + (holdingRequest.getBuyPrice() * holdingRequest.getQuantity())) / newQty;
+
+            existingHolding.setQuantity(newQty);
+            existingHolding.setBuyPrice(newBuyPrice);
             existingHolding.setCurrent_price(currentPrice);
             existingHolding.setAlert(holdingRequest.getAlert());
             existingHolding.setAbove(holdingRequest.getAbove());
             existingHolding.setBelow(holdingRequest.getBelow());
+
             holdingRepository.save(existingHolding);
         } else {
+            if (holdingRequest.getBuyPrice() == null) {
+                holdingRequest.setBuyPrice(currentPrice);
+            }
             holdingRequest.setUserDetails(user);
             holdingRequest.setCurrent_price(currentPrice);
             holdingRepository.save(holdingRequest);
@@ -93,8 +107,34 @@ public class HoldingService implements HoldingServiceInterface {
     }
 
     @Override
-    public List<Holding> viewPortfolio(Long userId) {
-        return holdingRepository.findAllByUserDetails_Id(userId);
+    public List<HoldingDto> viewPortfolio(Long userId) {
+        List<Holding> holdings = holdingRepository.findAllByUserDetails_Id(userId);
+        List<HoldingDto> dtoList = new ArrayList<>();
+
+        for (Holding h : holdings) {
+            double buyPrice = h.getBuyPrice() != null ? h.getBuyPrice() : 0.0;
+            double currentPrice = h.getCurrent_price() != null ? h.getCurrent_price() : 0.0;
+            int quantity = h.getQuantity();
+
+            double gain = (currentPrice - buyPrice) * quantity;
+            double gainPercent = 0.0;
+            if (buyPrice * quantity != 0) {
+                gainPercent = (gain / (buyPrice * quantity)) * 100;
+            }
+
+            HoldingDto dto = new HoldingDto(
+                    h.getStockSymbol(),
+                    quantity,
+                    currentPrice,
+                    buyPrice,
+                    gain,
+                    gainPercent
+            );
+
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 
     @Override
@@ -127,4 +167,42 @@ public class HoldingService implements HoldingServiceInterface {
             return "Holding not found.";
         }
     }
+    @Override
+    public String updateAlertSettings(Long id, String alertStatus, Double above, Double below) {
+        Optional<Holding> optional = holdingRepository.findById(id);
+
+        if (optional.isPresent()) {
+            Holding holding = optional.get();
+
+            holding.setAlert(alertStatus);
+
+            if ("ON".equalsIgnoreCase(alertStatus)) {
+                holding.setAbove(above);
+                holding.setBelow(below);
+            } else {
+                holding.setAbove(null);
+                holding.setBelow(null);
+            }
+
+            holdingRepository.save(holding);
+            return "Alert status updated.";
+        } else {
+            throw new RuntimeException("Holding not found.");
+        }
+    }
+
+
+    @Override
+    public String deleteHolding(Long id) {
+        Optional<Holding> optional = holdingRepository.findById(id);
+
+        if (optional.isPresent()) {
+            holdingRepository.deleteById(id);
+            return "Holding deleted successfully.";
+        } else {
+            throw new RuntimeException("Holding not found.");
+        }
+    }
+
+
 }

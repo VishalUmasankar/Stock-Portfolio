@@ -1,5 +1,6 @@
 package com.stockportfolio.controller;
 
+import com.stockportfolio.dto.HoldingDto;
 import com.stockportfolio.dto.LoginRequest;
 import com.stockportfolio.dto.LoginResponse;
 import com.stockportfolio.dto.RegistrationRequest;
@@ -60,9 +61,10 @@ public class UserController {
     }
 
     @GetMapping("/holdings/portfolio/{userId}")
-    public ResponseEntity<List<Holding>> viewPortfolio(@PathVariable Long userId) {
+    public ResponseEntity<List<HoldingDto>> viewPortfolio(@PathVariable Long userId) {
         try {
-            return ResponseEntity.ok(holdingService.viewPortfolio(userId));
+            List<HoldingDto> portfolio = holdingService.viewPortfolio(userId);
+            return ResponseEntity.ok(portfolio);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(null);
         }
@@ -76,4 +78,16 @@ public class UserController {
             return ResponseEntity.internalServerError().body(null);
         }
     }
+    @PutMapping("/holdings/update")
+    public ResponseEntity<String> updateHolding(@RequestBody Holding holding) {
+        try {
+            return ResponseEntity.ok(holdingService.updateAlertSettings(holding.getId(), holding.getAlert(), holding.getAbove(), holding.getBelow()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error updating holding alert: " + e.getMessage());
+        }
+    }
+
+    
+
+
 }
