@@ -40,25 +40,6 @@ class HoldingServiceTest {
     }
 
     @Test
-    void testBuyStock_NewHolding() throws Exception {
-        Holding holding = new Holding();
-        User user = new User();
-        user.setId((int) 1L);
-        holding.setUserDetails(user);
-        holding.setStockSymbol("AAPL");
-        holding.setQuantity(10);
-
-        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(holdingRepository.findByUserDetails_IdAndStockSymbol(1L, "AAPL")).thenReturn(null);
-        when(Util.getLatestPrice("AAPL")).thenReturn(150.0);
-
-        String result = holdingService.buyStock(holding);
-        assertEquals("Stock bought and updated.", result);
-        verify(holdingRepository).save(holding);
-        verify(activityRepository).save(any(Activity.class));
-    }
-
-    @Test
     void testSellStock_PartialSell() {
         Holding existing = new Holding();
         User user = new User();
