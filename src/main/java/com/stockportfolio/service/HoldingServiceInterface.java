@@ -13,7 +13,6 @@ public interface HoldingServiceInterface {
     List<Activity> getUserActivity(Long userId);
     String toggleAlert(Long id, boolean status);
     String updatePrice(Long id, Double price);
-    String deleteHolding(Long id);
     String updateAlertSettings(Long id, String alertStatus, Double above, Double below);
 
 
