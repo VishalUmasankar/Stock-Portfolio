@@ -10,4 +10,6 @@ public interface UserServiceInterface {
     User updateUser(User user);
     void deleteUser(Long userId);
 
+
 }
+

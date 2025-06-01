@@ -57,12 +57,14 @@ public class UserService implements UserServiceInterface {
         existing.setemail(updatedUser.getemail());
         return userRepository.save(existing);
     }
-
     @Override
     public void deleteUser(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        userRepository.delete(user);
+        if (!userRepository.existsById(userId)) {
+            throw new RuntimeException("User not found with ID: " + userId);
+        }
+        userRepository.deleteById(userId);
     }
 
+
+    
 }

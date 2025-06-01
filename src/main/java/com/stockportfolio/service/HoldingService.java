@@ -37,13 +37,13 @@ public class HoldingService implements HoldingServiceInterface {
                 .findByUserDetails_IdAndStockSymbol(user.getId(), holdingRequest.getStockSymbol())
                 .orElse(null);
 
-        double currentPrice = Util.getLatestPrice(holdingRequest.getStockSymbol());
-
+       double currentPrice = Util.getLatestPrice(holdingRequest.getStockSymbol());
+        
         if (existingHolding != null) {
             // Calculate new average buy price weighted by quantity
             int oldQty = existingHolding.getQuantity();
             double oldBuyPrice = existingHolding.getBuyPrice() != null ? existingHolding.getBuyPrice() : 0.0;
-
+            
             int newQty = oldQty + holdingRequest.getQuantity();
             double newBuyPrice = ((oldBuyPrice * oldQty) + (holdingRequest.getBuyPrice() * holdingRequest.getQuantity())) / newQty;
 
@@ -186,19 +186,6 @@ public class HoldingService implements HoldingServiceInterface {
 
             holdingRepository.save(holding);
             return "Alert status updated.";
-        } else {
-            throw new RuntimeException("Holding not found.");
-        }
-    }
-
-
-    @Override
-    public String deleteHolding(Long id) {
-        Optional<Holding> optional = holdingRepository.findById(id);
-
-        if (optional.isPresent()) {
-            holdingRepository.deleteById(id);
-            return "Holding deleted successfully.";
         } else {
             throw new RuntimeException("Holding not found.");
         }
