@@ -190,9 +190,4 @@ public class HoldingService implements HoldingServiceInterface {
             throw new RuntimeException("Holding not found.");
         }
     }
-
-
-    
-
-
 }
