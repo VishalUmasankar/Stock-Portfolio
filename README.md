@@ -97,6 +97,8 @@ POST /api/holdings/sell — Sell holdings.
 POST /api/holdings/buy — Buy holdings.
 GET /api/holdings/portfolio/{userId} — Get portfolio details of a user.
 GET /api/activity/user/{userId} — Get user activity.
+PUT /api/holdings/update — Update alert values.
+DELETE /api/user/{id} — Delete the user.
 ```
 
 3. **Alert Controller**
